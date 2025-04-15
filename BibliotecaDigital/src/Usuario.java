@@ -14,7 +14,7 @@ public class Usuario {
         this.id = id;
         this.email = email;
     }
-    
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
     public String getId() { return id; }
