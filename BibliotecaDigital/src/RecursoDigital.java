@@ -20,6 +20,6 @@ public abstract class RecursoDigital {
     public String getEstado() { return estado; }
     public void actualizarEstado(String nuevoEstado) { this.estado = nuevoEstado; }
 
-    
+
     public abstract void mostrarInformacion();
 }
