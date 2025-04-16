@@ -192,7 +192,8 @@ public class Consola {
 
     public static void main(String[] args) {
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
-        GestorRecursos gestorRecursos = new GestorRecursos();
+        ServicioNotificaciones servicioNotificaciones = new ServicioNotificacionesEmail();
+        GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
 
         Consola consola = new Consola(gestorUsuarios, gestorRecursos);
         consola.iniciar();
