@@ -14,6 +14,15 @@ public abstract class RecursoDigital {
         this.estado = "disponible";
     }
 
+    public void cambiarEstadoDisponibilidad() {
+        if (getEstado().equalsIgnoreCase("disponible")) {
+            actualizarEstado("prestado");
+        } else {
+            actualizarEstado("disponible");
+        }
+    }
+
+
 
     public String getIdentificador() { return identificador; }
     public String getTitulo() { return titulo; }
