@@ -18,6 +18,12 @@ public class GestorRecursos {
                 .collect(Collectors.toList());
     }
 
+    public List<RecursoDigital> buscarPorCategoria(CategoriaRecurso categoria) {
+        return recursos.stream()
+                .filter(r -> r.getCategoria().equals(categoria))
+                .collect(Collectors.toList());
+    }
+
     public void agregarRecurso(RecursoDigital recurso) {
         recursos.add(recurso);
     }

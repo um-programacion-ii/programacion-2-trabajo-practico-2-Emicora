@@ -1,10 +1,9 @@
-
 public class Libro extends RecursoDigital implements Prestable, Renovable {
     private String autor;
     private int paginas;
 
-    public Libro(String identificador, String titulo, String autor, int paginas) {
-        super(identificador, titulo);
+    public Libro(String identificador, String titulo, CategoriaRecurso categoria, String autor, int paginas) {
+        super(identificador, titulo, categoria);
         this.autor = autor;
         this.paginas = paginas;
     }
@@ -13,6 +12,7 @@ public class Libro extends RecursoDigital implements Prestable, Renovable {
     public void mostrarInformacion() {
         System.out.println("Libro: " + getTitulo()
                 + " | Autor: " + autor
+                + " | Categoría: " + getCategoria()
                 + " | Estado: " + getEstado());
     }
 
