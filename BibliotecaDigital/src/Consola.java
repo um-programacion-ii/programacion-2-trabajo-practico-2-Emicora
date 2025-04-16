@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.List;
+import java.util.Arrays;
 
 public class Consola {
     private GestorUsuarios gestorUsuarios;
@@ -47,7 +48,7 @@ public class Consola {
                 System.out.println("Entrada inválida. Por favor, ingrese un número.");
             }
             System.out.println();
-        } while(opcion != 7);
+        } while (opcion != 7);
 
         scanner.close();
     }
@@ -81,6 +82,7 @@ public class Consola {
             System.out.println("Error al registrar usuario: " + e.getMessage());
         }
     }
+
     private void agregarRecurso(Scanner scanner) {
         System.out.println("----- Agregar Recurso -----");
         System.out.println("Seleccione el tipo de recurso a agregar:");
@@ -93,6 +95,17 @@ public class Consola {
             tipoRecurso = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Opción inválida. Se cancelará la operación.");
+            return;
+        }
+
+        System.out.println("Categorías disponibles: " + Arrays.toString(CategoriaRecurso.values()));
+        System.out.print("Ingrese la categoría: ");
+        String catStr = scanner.nextLine().toUpperCase();
+        CategoriaRecurso categoria = null;
+        try {
+            categoria = CategoriaRecurso.valueOf(catStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Categoría inválida. Se cancelará la operación.");
             return;
         }
 
@@ -113,7 +126,7 @@ public class Consola {
                     System.out.println("Número de páginas inválido. Se asignará 0.");
                 }
                 try {
-                    Libro libro = new Libro(idLibro, tituloLibro, autor, paginas);
+                    Libro libro = new Libro(idLibro, tituloLibro, categoria, autor, paginas);
                     gestorRecursos.agregarRecurso(libro);
                     System.out.println("Libro agregado correctamente.");
                 } catch (IllegalArgumentException e) {
@@ -136,7 +149,7 @@ public class Consola {
                     System.out.println("Número de minutos inválido. Se asignará 0.");
                 }
                 try {
-                    Audiolibro audiolibro = new Audiolibro(idAudio, tituloAudio, narrador, duracion);
+                    Audiolibro audiolibro = new Audiolibro(idAudio, tituloAudio, categoria, narrador, duracion);
                     gestorRecursos.agregarRecurso(audiolibro);
                     System.out.println("Audiolibro agregado correctamente.");
                 } catch (IllegalArgumentException e) {
@@ -152,7 +165,7 @@ public class Consola {
                 System.out.print("Ingrese el ilustrador: ");
                 String ilustrador = scanner.nextLine();
                 try {
-                    Historieta historieta = new Historieta(idHistorieta, tituloHistorieta, ilustrador);
+                    Historieta historieta = new Historieta(idHistorieta, tituloHistorieta, categoria, ilustrador);
                     gestorRecursos.agregarRecurso(historieta);
                     System.out.println("Historieta agregada correctamente.");
                 } catch (IllegalArgumentException e) {
@@ -187,8 +200,6 @@ public class Consola {
             }
         }
     }
-
-
 
     public static void main(String[] args) {
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
