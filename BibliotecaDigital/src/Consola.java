@@ -107,12 +107,21 @@ public class Consola {
         }
     }
 
+    public void probarPolimorfismo() {
+        RecursoDigital recurso1 = new Libro("L001", "El señor de los anillos", "J. R. R. Tolkien", 350);
+        RecursoDigital recurso2 = new Historieta("H001", "Garfield", "Jim Davis");
+        recurso1.mostrarInformacion();
+        recurso2.mostrarInformacion();
+    }
+
     public static void main(String[] args) {
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
         GestorRecursos gestorRecursos = new GestorRecursos();
 
 
         Consola consola = new Consola(gestorUsuarios, gestorRecursos);
+        consola.probarPolimorfismo();
         consola.iniciar();
     }
+
 }
