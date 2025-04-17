@@ -15,9 +15,9 @@ public class GestorUsuarios {
         usuarios.put(usuario.getId(), usuario);
     }
 
-    public Usuario buscarUsuario(String id) {
+    public Usuario buscarUsuario(String id) throws UsuarioNoEncontradoException {
         if (!usuarios.containsKey(id)) {
-            throw new RuntimeException("Usuario no encontrado.");
+            throw new UsuarioNoEncontradoException("Usuario con ID " + id + " no encontrado.");
         }
         return usuarios.get(id);
     }
