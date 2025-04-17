@@ -42,6 +42,9 @@ public class Consola {
                         buscarRecurso(scanner);
                         break;
                     case 8:
+                        buscarUsuario(scanner);
+                        break;
+                    case 9:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
@@ -51,7 +54,7 @@ public class Consola {
                 System.out.println("Entrada inválida. Por favor, ingrese un número.");
             }
             System.out.println();
-        } while (opcion != 8);
+        } while (opcion != 9);
 
         scanner.close();
     }
@@ -65,8 +68,24 @@ public class Consola {
         System.out.println("5. Realizar Reserva");
         System.out.println("6. Listar Recursos");
         System.out.println("7. Buscar Recurso");
-        System.out.println("8. Salir");
+        System.out.println("8. Buscar Usuario");
+        System.out.println("9. Salir");
         System.out.print("Seleccione una opción: ");
+    }
+
+    private void buscarUsuario(Scanner scanner) {
+        System.out.println("----- Buscar Usuario -----");
+        System.out.print("Ingrese el ID del usuario: ");
+        String id = scanner.nextLine();
+        try {
+            Usuario usuario = gestorUsuarios.buscarUsuario(id);
+            System.out.println("Usuario encontrado:");
+            System.out.println("  Nombre: " + usuario.getNombre());
+            System.out.println("  ID:     " + usuario.getId());
+            System.out.println("  Email:  " + usuario.getEmail());
+        } catch (UsuarioNoEncontradoException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void buscarRecurso(Scanner scanner) {
