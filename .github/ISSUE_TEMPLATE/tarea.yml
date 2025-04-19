@@ -10,15 +10,6 @@ body:
       value: |
         🔖 **Por favor completa los siguientes campos para describir tu Issue.**
 
-  - type: input
-
-    id: titulo
-    attributes:
-      label: "Título"
-      description: "Breve resumen del Issue"
-      placeholder: "Implementar sistema de préstamos concurrente"
-    validations:
-      required: true
 
   - type: textarea
 
