@@ -1,0 +1,30 @@
+name: "Título del Issue"
+description: "Describe brevemente el propósito de este Issue."
+title: "[TÍTULO]"
+labels:
+  - tipo
+  - componente
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Descripción
+        <!-- Detalla qué problema o mejora aborda este Issue -->
+
+  - type: checkboxes
+    id: requisitos
+    attributes:
+      label: Requisitos
+      options:
+        - <!-- Requisito o tarea 1 -->
+        - <!-- Requisito o tarea 2 -->
+        - <!-- Requisito o tarea 3 -->
+
+  - type: checkboxes
+    id: criterios_de_aceptacion
+    attributes:
+      label: Criterios de Aceptación
+      options:
+        - <!-- Criterio para dar por cerrado el Issue -->
+        - <!-- Otro criterio de aceptación -->
+
