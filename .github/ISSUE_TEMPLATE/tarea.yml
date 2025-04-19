@@ -1,30 +1,70 @@
-name: "Título del Issue"
-description: "Describe brevemente el propósito de este Issue."
-title: "[TÍTULO]"
-labels:
-  - tipo
-  - componente
+name: "Plantilla genérica de Issue"
+description: "Template con campos de Título, Descripción, Requisitos, Criterios de Aceptación y Labels"
+title: "[Issue] "
+labels: []
+assignees: []
 body:
   - type: markdown
+
     attributes:
       value: |
-        ## Descripción
-        <!-- Detalla qué problema o mejora aborda este Issue -->
+        🔖 **Por favor completa los siguientes campos para describir tu Issue.**
 
-  - type: checkboxes
+  - type: input
+
+    id: titulo
+    attributes:
+      label: "Título"
+      description: "Breve resumen del Issue"
+      placeholder: "Implementar sistema de préstamos concurrente"
+    validations:
+      required: true
+
+  - type: textarea
+
+    id: descripcion
+    attributes:
+      label: "Descripción"
+      description: "Explica lo que se busca lograr"
+      placeholder: |
+        Crear el sistema de préstamos que utilice hilos y el patrón productor-consumidor para procesar solicitudes de préstamo en tiempo real.
+    validations:
+      required: true
+
+  - type: textarea
+
     id: requisitos
     attributes:
-      label: Requisitos
-      options:
-        - <!-- Requisito o tarea 1 -->
-        - <!-- Requisito o tarea 2 -->
-        - <!-- Requisito o tarea 3 -->
+      label: "Requisitos"
+      description: "Lista las tareas o requisitos clave"
+      placeholder: |
+        - Implementar BlockingQueue para solicitudes de préstamo
+        - Crear procesador de solicitudes usando ExecutorService
+        - Implementar sistema de notificaciones
+        - Asegurar thread-safety en operaciones de préstamo
+    validations:
+      required: true
 
-  - type: checkboxes
-    id: criterios_de_aceptacion
+  - type: textarea
+
+    id: criterios_aceptacion
     attributes:
-      label: Criterios de Aceptación
-      options:
-        - <!-- Criterio para dar por cerrado el Issue -->
-        - <!-- Otro criterio de aceptación -->
+      label: "Criterios de Aceptación"
+      description: "Define cómo saber que el Issue está completo"
+      placeholder: |
+        - Sistema procesa préstamos concurrentemente
+        - Manejo adecuado de excepciones
+        - Documentación de diseño
+    validations:
+      required: true
+
+  - type: input
+
+    id: labels
+    attributes:
+      label: "Labels"
+      description: "Indica las etiquetas a aplicar, separadas por comas"
+      placeholder: "enhancement, concurrency"
+    validations:
+      required: true
 
