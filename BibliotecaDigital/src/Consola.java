@@ -80,7 +80,8 @@ public class Consola {
         System.out.println("7. Listar Recursos");
         System.out.println("8. Buscar Recurso");
         System.out.println("9. Buscar Usuario");
-        System.out.println("10. Salir");
+        System.out.println("10. Mostrar Notificaciones");
+        System.out.println("11. Salir");
         System.out.print("Seleccione una opción: ");
     }
 
@@ -338,12 +339,14 @@ public class Consola {
 
     public static void main(String[] args) {
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
+        ServicioNotificacionPrestamos notificador = new ServicioNotificacionPrestamos();
         ServicioNotificaciones servicioNotificaciones = new ServicioNotificacionesEmail();
         GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
-        GestorPrestamos gestorPrestamos = new GestorPrestamos();
+        GestorPrestamos gestorPrestamos = new GestorPrestamos(notificador);
         GestorReservas gestorReservas = new GestorReservas();
 
         Consola consola = new Consola(gestorUsuarios, gestorRecursos, gestorPrestamos, gestorReservas);
         consola.iniciar();
+        notificador.shutdown();
     }
 }

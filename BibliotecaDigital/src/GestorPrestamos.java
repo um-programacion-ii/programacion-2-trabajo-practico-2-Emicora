@@ -6,6 +6,9 @@ public class GestorPrestamos {
     private List<Prestamo> prestamos = new ArrayList<>();
     private ServicioNotificacionPrestamos notificador;
 
+    public GestorPrestamos(ServicioNotificacionPrestamos notificador) {
+        this.notificador = notificador;
+    }
     public synchronized void realizarPrestamo(Usuario usuario, RecursoDigital recurso) throws RecursoNoDisponibleException {
         if (!recurso.getEstado().equalsIgnoreCase("disponible")) {
             throw new RecursoNoDisponibleException("El recurso " + recurso.getTitulo() + " no está disponible.");
