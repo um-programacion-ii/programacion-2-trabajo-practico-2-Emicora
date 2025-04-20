@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.List;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Consola {
     private GestorUsuarios gestorUsuarios;
@@ -55,6 +56,9 @@ public class Consola {
                         mostrarNotificaciones();
                         break;
                     case 11:
+                        mostrarPrestamosActivos();
+                        break;
+                    case 12:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
@@ -64,7 +68,7 @@ public class Consola {
                 System.out.println("Entrada inválida. Por favor, ingrese un número.");
             }
             System.out.println();
-        } while (opcion != 11);
+        } while (opcion != 12);
 
         scanner.close();
     }
@@ -81,7 +85,8 @@ public class Consola {
         System.out.println("8. Buscar Recurso");
         System.out.println("9. Buscar Usuario");
         System.out.println("10. Mostrar Notificaciones");
-        System.out.println("11. Salir");
+        System.out.println("11. Mostrar Prestamos Activos");
+        System.out.println("12. Salir");
         System.out.print("Seleccione una opción: ");
     }
 
@@ -323,7 +328,25 @@ public class Consola {
         } catch (Exception e) {
             System.out.println("Error al reservar: " + e.getMessage());
         }
+    }private void mostrarPrestamosActivos() {
+        System.out.println("----- Préstamos Activos -----");
+        List<Prestamo> activos = gestorPrestamos.getPrestamos().stream()
+                .filter(p -> p.getFechaDevolucion() == null)
+                .collect(Collectors.toList());
+
+        if (activos.isEmpty()) {
+            System.out.println("No hay préstamos activos.");
+        } else {
+            for (Prestamo p : activos) {
+                System.out.printf("Recurso: %s | Usuario: %s | Fecha préstamo: %s%n",
+                        p.getRecurso().getTitulo(),
+                        p.getUsuario().getNombre(),
+                        p.getFechaPrestamo());
+            }
+        }
     }
+
+
 
     private void listarRecursos() {
         System.out.println("----- Listado de Recursos -----");
