@@ -4,7 +4,11 @@ import java.util.List;
 
 public class GestorPrestamos {
     private List<Prestamo> prestamos = new ArrayList<>();
+    private ServicioNotificacionPrestamos notificador;
 
+    public GestorPrestamos(ServicioNotificacionPrestamos notificador) {
+        this.notificador = notificador;
+    }
     public synchronized void realizarPrestamo(Usuario usuario, RecursoDigital recurso) throws RecursoNoDisponibleException {
         if (!recurso.getEstado().equalsIgnoreCase("disponible")) {
             throw new RecursoNoDisponibleException("El recurso " + recurso.getTitulo() + " no está disponible.");
@@ -12,6 +16,7 @@ public class GestorPrestamos {
         recurso.actualizarEstado("prestado");
         Prestamo prestamo = new Prestamo(usuario, recurso);
         prestamos.add(prestamo);
+        notificador.notificarPrestamo(usuario, recurso);
         System.out.println("Préstamo realizado: " + recurso.getTitulo() + " a " + usuario.getNombre());
     }
 

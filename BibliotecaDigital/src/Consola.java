@@ -52,6 +52,9 @@ public class Consola {
                         buscarUsuario(scanner);
                         break;
                     case 10:
+                        mostrarNotificaciones();
+                        break;
+                    case 11:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
@@ -61,7 +64,7 @@ public class Consola {
                 System.out.println("Entrada inválida. Por favor, ingrese un número.");
             }
             System.out.println();
-        } while (opcion != 10);
+        } while (opcion != 11);
 
         scanner.close();
     }
@@ -77,8 +80,19 @@ public class Consola {
         System.out.println("7. Listar Recursos");
         System.out.println("8. Buscar Recurso");
         System.out.println("9. Buscar Usuario");
-        System.out.println("10. Salir");
+        System.out.println("10. Mostrar Notificaciones");
+        System.out.println("11. Salir");
         System.out.print("Seleccione una opción: ");
+    }
+
+    private void mostrarNotificaciones() {
+        System.out.println("----- Notificaciones Pendientes -----");
+        List<String> notifs = NotificationCenter.getInstance().fetchAll();
+        if (notifs.isEmpty()) {
+            System.out.println("No hay notificaciones.");
+        } else {
+            notifs.forEach(System.out::println);
+        }
     }
 
     private void buscarUsuario(Scanner scanner) {
@@ -151,9 +165,11 @@ public class Consola {
         String id = scanner.nextLine();
         System.out.print("Ingrese el email: ");
         String email = scanner.nextLine();
+        System.out.println("Ingrase el numero de telefono:");
+        String numero = scanner.nextLine();
 
         try {
-            Usuario usuario = new Usuario(nombre, id, email);
+            Usuario usuario = new Usuario(nombre, id, email, numero);
             gestorUsuarios.registrarUsuario(usuario);
             System.out.println("Usuario registrado correctamente.");
         } catch (IllegalArgumentException e) {
@@ -323,12 +339,14 @@ public class Consola {
 
     public static void main(String[] args) {
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
+        ServicioNotificacionPrestamos notificador = new ServicioNotificacionPrestamos();
         ServicioNotificaciones servicioNotificaciones = new ServicioNotificacionesEmail();
         GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
-        GestorPrestamos gestorPrestamos = new GestorPrestamos();
+        GestorPrestamos gestorPrestamos = new GestorPrestamos(notificador);
         GestorReservas gestorReservas = new GestorReservas();
 
         Consola consola = new Consola(gestorUsuarios, gestorRecursos, gestorPrestamos, gestorReservas);
         consola.iniciar();
+        notificador.shutdown();
     }
 }
