@@ -151,9 +151,11 @@ public class Consola {
         String id = scanner.nextLine();
         System.out.print("Ingrese el email: ");
         String email = scanner.nextLine();
+        System.out.println("Ingrase el numero de telefono:");
+        String numero = scanner.nextLine();
 
         try {
-            Usuario usuario = new Usuario(nombre, id, email);
+            Usuario usuario = new Usuario(nombre, id, email, numero);
             gestorUsuarios.registrarUsuario(usuario);
             System.out.println("Usuario registrado correctamente.");
         } catch (IllegalArgumentException e) {
