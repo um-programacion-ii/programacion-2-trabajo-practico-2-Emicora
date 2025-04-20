@@ -17,8 +17,11 @@ public class GestorPrestamos {
 
     public synchronized void devolverRecurso(RecursoDigital recurso) {
         recurso.actualizarEstado("disponible");
-       
-        System.out.println("Recurso devuelto: " + recurso.getTitulo());
+        prestamos.stream()
+                .filter(p -> p.getRecurso() == recurso && p.getFechaDevolucion() == null)
+                .findFirst()
+                .ifPresent(p -> p.setFechaDevolucion(LocalDateTime.now()));
+        System.out.println("Recurso devuelto: \"" + recurso.getTitulo() + "\"");
     }
 
     public List<Prestamo> getPrestamos() {
