@@ -52,6 +52,9 @@ public class Consola {
                         buscarUsuario(scanner);
                         break;
                     case 10:
+                        mostrarNotificaciones();
+                        break;
+                    case 11:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
@@ -61,7 +64,7 @@ public class Consola {
                 System.out.println("Entrada inválida. Por favor, ingrese un número.");
             }
             System.out.println();
-        } while (opcion != 10);
+        } while (opcion != 11);
 
         scanner.close();
     }
@@ -79,6 +82,16 @@ public class Consola {
         System.out.println("9. Buscar Usuario");
         System.out.println("10. Salir");
         System.out.print("Seleccione una opción: ");
+    }
+
+    private void mostrarNotificaciones() {
+        System.out.println("----- Notificaciones Pendientes -----");
+        List<String> notifs = NotificationCenter.getInstance().fetchAll();
+        if (notifs.isEmpty()) {
+            System.out.println("No hay notificaciones.");
+        } else {
+            notifs.forEach(System.out::println);
+        }
     }
 
     private void buscarUsuario(Scanner scanner) {
