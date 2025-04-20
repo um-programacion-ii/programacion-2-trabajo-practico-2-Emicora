@@ -8,6 +8,7 @@ public class GestorReservas {
         colaReservas.offer(reserva);
         System.out.println("Reserva agregada: \"" + reserva.getRecurso().getTitulo() +
                 "\" por " + reserva.getUsuario().getNombre());
+        reserva.getRecurso().actualizarEstado("reservado");
     }
 
     public Reserva procesarSiguienteReserva() {

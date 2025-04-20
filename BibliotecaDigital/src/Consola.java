@@ -6,11 +6,13 @@ public class Consola {
     private GestorUsuarios gestorUsuarios;
     private GestorRecursos gestorRecursos;
     private GestorPrestamos gestorPrestamos;
+    private GestorReservas gestorReservas;
 
-    public Consola(GestorUsuarios gestorUsuarios, GestorRecursos gestorRecursos, GestorPrestamos gestorPrestamos) {
+    public Consola(GestorUsuarios gestorUsuarios, GestorRecursos gestorRecursos, GestorPrestamos gestorPrestamos, GestorReservas gestorReservas) {
         this.gestorUsuarios = gestorUsuarios;
         this.gestorRecursos = gestorRecursos;
         this.gestorPrestamos = gestorPrestamos;
+        this.gestorReservas = gestorReservas;
     }
 
     public void iniciar() {
@@ -38,15 +40,18 @@ public class Consola {
                         realizarReserva(scanner);
                         break;
                     case 6:
-                        listarRecursos();
+                        gestorReservas.mostrarReservas();
                         break;
                     case 7:
-                        buscarRecurso(scanner);
+                        listarRecursos();
                         break;
                     case 8:
-                        buscarUsuario(scanner);
+                        buscarRecurso(scanner);
                         break;
                     case 9:
+                        buscarUsuario(scanner);
+                        break;
+                    case 10:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
@@ -56,7 +61,7 @@ public class Consola {
                 System.out.println("Entrada inválida. Por favor, ingrese un número.");
             }
             System.out.println();
-        } while (opcion != 9);
+        } while (opcion != 10);
 
         scanner.close();
     }
@@ -68,10 +73,11 @@ public class Consola {
         System.out.println("3. Realizar Préstamo");
         System.out.println("4. Devolver Recurso");
         System.out.println("5. Realizar Reserva");
-        System.out.println("6. Listar Recursos");
-        System.out.println("7. Buscar Recurso");
-        System.out.println("8. Buscar Usuario");
-        System.out.println("9. Salir");
+        System.out.println("6. Mostrar Reservas");
+        System.out.println("7. Listar Recursos");
+        System.out.println("8. Buscar Recurso");
+        System.out.println("9. Buscar Usuario");
+        System.out.println("10. Salir");
         System.out.print("Seleccione una opción: ");
     }
 
@@ -285,6 +291,22 @@ public class Consola {
 
     private void realizarReserva(Scanner scanner) {
         System.out.println("----- Realizar Reserva -----");
+        try {
+            System.out.print("ID Usuario: ");
+            Usuario u2 = gestorUsuarios.buscarUsuario(scanner.nextLine());
+            System.out.print("ID Recurso: ");
+            String rr = scanner.nextLine();
+            RecursoDigital rd = gestorRecursos.listarRecursos().stream()
+                    .filter(x -> x.getIdentificador().equals(rr))
+                    .findFirst().orElse(null);
+            if (rd == null) {
+                System.out.println("Recurso no encontrado.");
+            } else {
+                gestorReservas.agregarReserva(new Reserva(u2, rd));
+            }
+        } catch (Exception e) {
+            System.out.println("Error al reservar: " + e.getMessage());
+        }
     }
 
     private void listarRecursos() {
@@ -304,8 +326,9 @@ public class Consola {
         ServicioNotificaciones servicioNotificaciones = new ServicioNotificacionesEmail();
         GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
         GestorPrestamos gestorPrestamos = new GestorPrestamos();
+        GestorReservas gestorReservas = new GestorReservas();
 
-        Consola consola = new Consola(gestorUsuarios, gestorRecursos, gestorPrestamos);
+        Consola consola = new Consola(gestorUsuarios, gestorRecursos, gestorPrestamos, gestorReservas);
         consola.iniciar();
     }
 }
