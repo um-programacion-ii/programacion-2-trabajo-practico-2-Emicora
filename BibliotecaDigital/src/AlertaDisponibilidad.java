@@ -12,7 +12,7 @@ public class AlertaDisponibilidad {
         this.usuarioReservante = usuarioReservante;
         this.gestorPrestamos = gestorPrestamos;
     }
-    
+
     public void enviarAlerta() {
         String msg = "Recurso '" + recurso.getTitulo()
                 + "' reservado por " + usuarioReservante.getNombre()
