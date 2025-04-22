@@ -10,14 +10,20 @@ public class GestorPrestamos {
         this.notificador = notificador;
     }
     public synchronized void realizarPrestamo(Usuario usuario, RecursoDigital recurso) throws RecursoNoDisponibleException {
+        String hilo = Thread.currentThread().getName();
         if (!recurso.getEstado().equalsIgnoreCase("disponible")) {
-            throw new RecursoNoDisponibleException("El recurso " + recurso.getTitulo() + " no está disponible.");
+            System.out.printf("[%s] PRÉSTAMO FALLIDO: recurso '%s' ya prestado.%n",
+                    hilo, recurso.getTitulo());
+            throw new RecursoNoDisponibleException(
+                    "El recurso '" + recurso.getTitulo() + "' no está disponible."
+            );
         }
         recurso.actualizarEstado("prestado");
         Prestamo prestamo = new Prestamo(usuario, recurso);
         prestamos.add(prestamo);
+        System.out.printf("[%s] PRÉSTAMO OK: '%s' a %s%n",
+                hilo, recurso.getTitulo(), usuario.getNombre());
         notificador.notificarPrestamo(usuario, recurso);
-        System.out.println("Préstamo realizado: " + recurso.getTitulo() + " a " + usuario.getNombre());
     }
 
     public synchronized void devolverRecurso(RecursoDigital recurso) {
