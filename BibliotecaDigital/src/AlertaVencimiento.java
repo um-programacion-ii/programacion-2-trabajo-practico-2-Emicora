@@ -20,6 +20,18 @@ public class AlertaVencimiento {
                     + prestamo.getRecurso().getTitulo()
                     + "' vence en " + diasFaltan + " día(s).");
             System.out.println("****************************");
+            ofrecerRenovacion();
+        }
+    }
+
+    private void ofrecerRenovacion() {
+        System.out.print("¿Desea renovar el préstamo? (s/n): ");
+        Scanner sc = new Scanner(System.in);
+        String resp = sc.nextLine().trim().toLowerCase();
+        if (resp.equals("s")) {
+            prestamo.getRecurso().actualizarEstado("disponible");
+            System.out.println("Préstamo renovado. Nueva fecha de vencimiento: "
+                    + LocalDateTime.now().plusDays(7));
         }
     }
 }
