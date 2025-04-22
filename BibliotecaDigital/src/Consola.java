@@ -1,6 +1,9 @@
 import java.util.Scanner;
 import java.util.List;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Consola {
@@ -65,6 +68,9 @@ public class Consola {
                         ejecutarAlertasVencimiento();
                         break;
                     case 14:
+                        HistorialAlertas.getInstance().mostrar();
+                        break;
+                    case 15:
                         System.out.println("Saliendo del sistema...");
                         break;
                     default:
@@ -74,7 +80,7 @@ public class Consola {
                 System.out.println("Entrada inválida. Por favor, ingrese un número.");
             }
             System.out.println();
-        } while (opcion != 14);
+        } while (opcion != 15);
 
         scanner.close();
     }
@@ -93,7 +99,8 @@ public class Consola {
         System.out.println("11. Mostrar Prestamos Activos");
         System.out.println("12. Mostrar Reportes");
         System.out.println("13. Verificar Vencimiento de Prestamo");
-        System.out.println("14. Salir");
+        System.out.println("14. Ver Historial de Alertas");
+        System.out.println("15. Salir");
         System.out.print("Seleccione una opción: ");
     }
 
@@ -393,6 +400,15 @@ public class Consola {
         GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
         GestorPrestamos gestorPrestamos = new GestorPrestamos(notificador);
         GestorReservas gestorReservas = new GestorReservas(gestorPrestamos);
+
+        ScheduledExecutorService scheduler =
+                Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            for (Prestamo p : gestorPrestamos.getPrestamos()) {
+                new AlertaVencimiento(p, 7).validarYEnviar();
+            }
+        }, 0, 10, TimeUnit.SECONDS);
+        scheduler.shutdown();
 
         Consola consola = new Consola(gestorUsuarios, gestorRecursos, gestorPrestamos, gestorReservas);
         consola.iniciar();
