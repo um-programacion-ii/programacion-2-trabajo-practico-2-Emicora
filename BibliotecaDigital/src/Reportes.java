@@ -17,13 +17,17 @@ public class Reportes {
 
     public static void reporteUsuariosActivos(List<Prestamo> prestamos) {
         Map<String, Long> conteoPorUsuario = prestamos.stream()
-                .collect(Collectors.groupingBy(p -> p.getUsuario().getNombre(), Collectors.counting()));
-        conteoPorUsuario.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .ifPresent(e -> mostrarReporte(
-                        "Usuario más activo",
-                        List.of(e.getKey() + " con " + e.getValue() + " préstamos")
+                .collect(Collectors.groupingBy(
+                        p -> p.getUsuario().getNombre(),
+                        Collectors.counting()
                 ));
+        List<String> top10 = conteoPorUsuario.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(10)
+                .map(e -> e.getKey() + " con " + e.getValue() + " préstamos")
+                .collect(Collectors.toList());
+
+        mostrarReporte("Top 10 Usuarios más activos", top10);
     }
 
     public static void reportePorCategoria(List<Prestamo> prestamos) {
