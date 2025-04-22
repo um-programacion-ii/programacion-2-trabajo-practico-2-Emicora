@@ -15,6 +15,17 @@ public class Reportes {
                 ));
     }
 
+    public static void reporteUsuariosActivos(List<Prestamo> prestamos) {
+        Map<String, Long> conteoPorUsuario = prestamos.stream()
+                .collect(Collectors.groupingBy(p -> p.getUsuario().getNombre(), Collectors.counting()));
+        conteoPorUsuario.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .ifPresent(e -> mostrarReporte(
+                        "Usuario más activo",
+                        List.of(e.getKey() + " con " + e.getValue() + " préstamos")
+                ));
+    }
+    
     private static void mostrarReporte(String titulo, List<String> lineas) {
         System.out.println("\n=== " + titulo + " ===");
         lineas.forEach(System.out::println);
