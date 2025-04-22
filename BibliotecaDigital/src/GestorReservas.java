@@ -2,7 +2,12 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class GestorReservas {
-    private BlockingQueue<Reserva> colaReservas = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Reserva> colaReservas = new LinkedBlockingQueue<>();
+    private final GestorPrestamos gestorPrestamos;
+
+    public GestorReservas(GestorPrestamos gestorPrestamos) {
+        this.gestorPrestamos = gestorPrestamos;
+    }
 
     public void agregarReserva(Reserva reserva) {
         colaReservas.offer(reserva);
@@ -12,7 +17,18 @@ public class GestorReservas {
     }
 
     public Reserva procesarSiguienteReserva() {
-        return colaReservas.poll();
+        Reserva reserva = colaReservas.poll();
+        if (reserva != null) {
+            RecursoDigital recurso = reserva.getRecurso();
+            if ("disponible".equalsIgnoreCase(recurso.getEstado())) {
+                new AlertaDisponibilidad(
+                        recurso,
+                        reserva.getUsuario(),
+                        gestorPrestamos
+                ).enviarAlerta();
+            }
+        }
+        return reserva;
     }
 
     public void mostrarReservas() {
@@ -21,5 +37,9 @@ public class GestorReservas {
                 System.out.println("- " + r.getRecurso().getTitulo() +
                         " reservado por " + r.getUsuario().getNombre())
         );
+    }
+
+    public BlockingQueue<Reserva> getColaReservas() {
+        return colaReservas;
     }
 }

@@ -319,6 +319,10 @@ public class Consola {
                 .findFirst().orElse(null);
         if (r2 != null) {
             gestorPrestamos.devolverRecurso(r2);
+            Reserva siguiente = gestorReservas.procesarSiguienteReserva();
+            if (siguiente == null) {
+                System.out.println("No hay reservas pendientes para este recurso.");
+            }
         } else {
             System.out.println("Recurso no encontrado.");
         }
@@ -388,7 +392,7 @@ public class Consola {
         ServicioNotificaciones servicioNotificaciones = new ServicioNotificacionesEmail();
         GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
         GestorPrestamos gestorPrestamos = new GestorPrestamos(notificador);
-        GestorReservas gestorReservas = new GestorReservas();
+        GestorReservas gestorReservas = new GestorReservas(gestorPrestamos);
 
         Consola consola = new Consola(gestorUsuarios, gestorRecursos, gestorPrestamos, gestorReservas);
         consola.iniciar();
