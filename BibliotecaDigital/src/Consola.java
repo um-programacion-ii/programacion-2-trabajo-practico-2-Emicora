@@ -1,6 +1,8 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +13,7 @@ public class Consola {
     private GestorRecursos gestorRecursos;
     private GestorPrestamos gestorPrestamos;
     private GestorReservas gestorReservas;
+    private final ExecutorService reportesExecutor = Executors.newSingleThreadExecutor();
 
     public Consola(GestorUsuarios gestorUsuarios, GestorRecursos gestorRecursos, GestorPrestamos gestorPrestamos, GestorReservas gestorReservas) {
         this.gestorUsuarios = gestorUsuarios;
@@ -62,7 +65,7 @@ public class Consola {
                         mostrarPrestamosActivos();
                         break;
                     case 12:
-                        generarReportesBasicos();
+                        generarReportesAsincrono();
                         break;
                     case 13:
                         ejecutarAlertasVencimiento();
@@ -384,13 +387,36 @@ public class Consola {
             }
         }
     }
-    private void generarReportesBasicos() {
-        System.out.println("===== REPORTES BÁSICOS =====");
-        List<Prestamo> prestamos = gestorPrestamos.getPrestamos();
-        Reportes.reporteRecursosMasPrestados(prestamos);
-        Reportes.reporteUsuariosActivos(prestamos);
-        Reportes.reportePorCategoria(prestamos);
-        System.out.println("=============================");
+    private void generarReportesAsincrono() {
+        System.out.println("Iniciando generación de reportes en segundo plano...");
+        reportesExecutor.submit(() -> {
+            List<Prestamo> snapshot;
+            synchronized (gestorPrestamos) {
+                snapshot = new ArrayList<>(gestorPrestamos.getPrestamos());
+            }
+            try {
+                System.out.println("Progreso: 0%");
+                Thread.sleep(3000);
+
+                Reportes.reporteRecursosMasPrestados(snapshot);
+                System.out.println("Progreso: 33%");
+                Thread.sleep(3000);
+
+                Reportes.reporteUsuariosActivos(snapshot);
+                System.out.println("Progreso: 66%");
+                Thread.sleep(3000);
+
+                Reportes.reportePorCategoria(snapshot);
+                System.out.println("Progreso: 100%");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Generación de reporte interrumpida.");
+            }
+        });
+    }
+
+    public void shutdown() {
+        reportesExecutor.shutdown();
     }
 
     public static void main(String[] args) {
@@ -413,5 +439,6 @@ public class Consola {
         Consola consola = new Consola(gestorUsuarios, gestorRecursos, gestorPrestamos, gestorReservas);
         consola.iniciar();
         notificador.shutdown();
+        consola.shutdown();
     }
 }
