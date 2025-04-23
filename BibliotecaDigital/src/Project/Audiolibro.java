@@ -1,5 +1,4 @@
 package Project;
-
 public class Audiolibro extends RecursoDigital implements Prestable, Renovable {
     private String narrador;
     private int duracion;
@@ -12,7 +11,7 @@ public class Audiolibro extends RecursoDigital implements Prestable, Renovable {
 
     @Override
     public void mostrarInformacion() {
-        System.out.println("Project.Audiolibro: " + getTitulo()
+        System.out.println("Audiolibro: " + getTitulo()
                 + " | Categoría: " + getCategoria()
                 + " | Narrador: " + narrador
                 + " | Duración: " + duracion + " minutos"

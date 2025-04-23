@@ -1,5 +1,4 @@
 package Project;
-
 public abstract class RecursoDigital {
     private String identificador;
     private String titulo;

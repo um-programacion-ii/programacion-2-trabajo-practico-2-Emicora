@@ -1,5 +1,4 @@
 package Project;
-
 public class Historieta extends RecursoDigital implements Prestable, Renovable {
     private String ilustrador;
 
@@ -10,7 +9,7 @@ public class Historieta extends RecursoDigital implements Prestable, Renovable {
 
     @Override
     public void mostrarInformacion() {
-        System.out.println("Project.Historieta: " + getTitulo()
+        System.out.println("Historieta: " + getTitulo()
                 + " | Categoría: " + getCategoria()
                 + " | Ilustrador: " + ilustrador
                 + " | Estado: " + getEstado());

@@ -1,5 +1,4 @@
 package Project;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,7 +12,7 @@ public class GestorReservas {
 
     public void agregarReserva(Reserva reserva) {
         colaReservas.offer(reserva);
-        System.out.println("Project.Reserva agregada: \"" + reserva.getRecurso().getTitulo() +
+        System.out.println("Reserva agregada: \"" + reserva.getRecurso().getTitulo() +
                 "\" por " + reserva.getUsuario().getNombre());
         reserva.getRecurso().actualizarEstado("reservado");
     }
