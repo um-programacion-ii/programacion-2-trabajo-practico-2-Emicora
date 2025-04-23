@@ -1,3 +1,4 @@
+package Project;
 public class Historieta extends RecursoDigital implements Prestable, Renovable {
     private String ilustrador;
 

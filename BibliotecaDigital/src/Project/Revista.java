@@ -1,4 +1,4 @@
-
+package Project;
 public class Revista extends RecursoDigital {
     private String editor;
     private int numero;
