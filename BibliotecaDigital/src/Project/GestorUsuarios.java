@@ -1,3 +1,5 @@
+package Project;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ public class GestorUsuarios {
 
     public Usuario buscarUsuario(String id) throws UsuarioNoEncontradoException {
         if (!usuarios.containsKey(id)) {
-            throw new UsuarioNoEncontradoException("Usuario con ID " + id + " no encontrado.");
+            throw new UsuarioNoEncontradoException("Project.Usuario con ID " + id + " no encontrado.");
         }
         return usuarios.get(id);
     }

@@ -1,3 +1,4 @@
+package Project;
 
 public interface Prestable {
     boolean estaDisponible();

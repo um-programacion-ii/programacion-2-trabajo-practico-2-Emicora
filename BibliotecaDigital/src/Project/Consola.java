@@ -1,3 +1,5 @@
+package Project;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
@@ -89,19 +91,19 @@ public class Consola {
     }
     private void mostrarMenuPrincipal() {
         System.out.println("----- Menú de Operaciones -----");
-        System.out.println("1. Registrar Usuario");
+        System.out.println("1. Registrar Project.Usuario");
         System.out.println("2. Agregar Recurso");
         System.out.println("3. Realizar Préstamo");
         System.out.println("4. Devolver Recurso");
-        System.out.println("5. Realizar Reserva");
+        System.out.println("5. Realizar Project.Reserva");
         System.out.println("6. Mostrar Reservas");
         System.out.println("7. Listar Recursos");
         System.out.println("8. Buscar Recurso");
-        System.out.println("9. Buscar Usuario");
+        System.out.println("9. Buscar Project.Usuario");
         System.out.println("10. Mostrar Notificaciones");
         System.out.println("11. Mostrar Prestamos Activos");
-        System.out.println("12. Mostrar Reportes");
-        System.out.println("13. Verificar Vencimiento de Prestamo");
+        System.out.println("12. Mostrar Project.Reportes");
+        System.out.println("13. Verificar Vencimiento de Project.Prestamo");
         System.out.println("14. Ver Historial de Alertas");
         System.out.println("15. Salir");
         System.out.print("Seleccione una opción: ");
@@ -125,12 +127,12 @@ public class Consola {
     }
 
     private void buscarUsuario(Scanner scanner) {
-        System.out.println("----- Buscar Usuario -----");
+        System.out.println("----- Buscar Project.Usuario -----");
         System.out.print("Ingrese el ID del usuario: ");
         String id = scanner.nextLine();
         try {
             Usuario usuario = gestorUsuarios.buscarUsuario(id);
-            System.out.println("Usuario encontrado:");
+            System.out.println("Project.Usuario encontrado:");
             System.out.println("  Nombre: " + usuario.getNombre());
             System.out.println("  ID:     " + usuario.getId());
             System.out.println("  Email:  " + usuario.getEmail());
@@ -187,7 +189,7 @@ public class Consola {
 
 
     private void registrarUsuario(Scanner scanner) {
-        System.out.println("----- Registrar Usuario -----");
+        System.out.println("----- Registrar Project.Usuario -----");
         System.out.print("Ingrese el nombre: ");
         String nombre = scanner.nextLine();
         System.out.print("Ingrese el ID: ");
@@ -200,7 +202,7 @@ public class Consola {
         try {
             Usuario usuario = new Usuario(nombre, id, email, numero);
             gestorUsuarios.registrarUsuario(usuario);
-            System.out.println("Usuario registrado correctamente.");
+            System.out.println("Project.Usuario registrado correctamente.");
         } catch (IllegalArgumentException e) {
             System.out.println("Error al registrar usuario: " + e.getMessage());
         }
@@ -209,9 +211,9 @@ public class Consola {
     private void agregarRecurso(Scanner scanner) {
         System.out.println("----- Agregar Recurso -----");
         System.out.println("Seleccione el tipo de recurso a agregar:");
-        System.out.println("1. Libro");
-        System.out.println("2. Audiolibro");
-        System.out.println("3. Historieta");
+        System.out.println("1. Project.Libro");
+        System.out.println("2. Project.Audiolibro");
+        System.out.println("3. Project.Historieta");
         System.out.print("Opción: ");
         int tipoRecurso = 0;
         try {
@@ -234,7 +236,7 @@ public class Consola {
 
         switch (tipoRecurso) {
             case 1:
-                System.out.println("----- Agregar Libro -----");
+                System.out.println("----- Agregar Project.Libro -----");
                 System.out.print("Ingrese el identificador: ");
                 String idLibro = scanner.nextLine();
                 System.out.print("Ingrese el título: ");
@@ -251,13 +253,13 @@ public class Consola {
                 try {
                     Libro libro = new Libro(idLibro, tituloLibro, categoria, autor, paginas);
                     gestorRecursos.agregarRecurso(libro);
-                    System.out.println("Libro agregado correctamente.");
+                    System.out.println("Project.Libro agregado correctamente.");
                 } catch (IllegalArgumentException e) {
                     System.out.println("Error al agregar el libro: " + e.getMessage());
                 }
                 break;
             case 2:
-                System.out.println("----- Agregar Audiolibro -----");
+                System.out.println("----- Agregar Project.Audiolibro -----");
                 System.out.print("Ingrese el identificador: ");
                 String idAudio = scanner.nextLine();
                 System.out.print("Ingrese el título: ");
@@ -274,13 +276,13 @@ public class Consola {
                 try {
                     Audiolibro audiolibro = new Audiolibro(idAudio, tituloAudio, categoria, narrador, duracion);
                     gestorRecursos.agregarRecurso(audiolibro);
-                    System.out.println("Audiolibro agregado correctamente.");
+                    System.out.println("Project.Audiolibro agregado correctamente.");
                 } catch (IllegalArgumentException e) {
                     System.out.println("Error al agregar el audiolibro: " + e.getMessage());
                 }
                 break;
             case 3:
-                System.out.println("----- Agregar Historieta -----");
+                System.out.println("----- Agregar Project.Historieta -----");
                 System.out.print("Ingrese el identificador: ");
                 String idHistorieta = scanner.nextLine();
                 System.out.print("Ingrese el título: ");
@@ -290,7 +292,7 @@ public class Consola {
                 try {
                     Historieta historieta = new Historieta(idHistorieta, tituloHistorieta, categoria, ilustrador);
                     gestorRecursos.agregarRecurso(historieta);
-                    System.out.println("Historieta agregada correctamente.");
+                    System.out.println("Project.Historieta agregada correctamente.");
                 } catch (IllegalArgumentException e) {
                     System.out.println("Error al agregar la historieta: " + e.getMessage());
                 }
@@ -303,7 +305,7 @@ public class Consola {
     private void realizarPrestamo(Scanner scanner) {
         System.out.println("----- Realizar Préstamo -----");
         try {
-            System.out.print("ID Usuario: ");
+            System.out.print("ID Project.Usuario: ");
             Usuario u = gestorUsuarios.buscarUsuario(scanner.nextLine());
             System.out.print("ID Recurso: ");
             String rid = scanner.nextLine();
@@ -339,9 +341,9 @@ public class Consola {
     }
 
     private void realizarReserva(Scanner scanner) {
-        System.out.println("----- Realizar Reserva -----");
+        System.out.println("----- Realizar Project.Reserva -----");
         try {
-            System.out.print("ID Usuario: ");
+            System.out.print("ID Project.Usuario: ");
             Usuario u2 = gestorUsuarios.buscarUsuario(scanner.nextLine());
             System.out.print("ID Recurso: ");
             String rr = scanner.nextLine();
@@ -366,7 +368,7 @@ public class Consola {
             System.out.println("No hay préstamos activos.");
         } else {
             for (Prestamo p : activos) {
-                System.out.printf("Recurso: %s | Usuario: %s | Fecha préstamo: %s%n",
+                System.out.printf("Recurso: %s | Project.Usuario: %s | Fecha préstamo: %s%n",
                         p.getRecurso().getTitulo(),
                         p.getUsuario().getNombre(),
                         p.getFechaPrestamo());

@@ -6,7 +6,7 @@
 Desarrollar un sistema de gestión de biblioteca digital que implemente los cinco principios SOLID, programación orientada a objetos, y conceptos avanzados de Java. El sistema deberá manejar diferentes tipos de recursos digitales, préstamos, reservas, y notificaciones en tiempo real.
 
 ## 👨‍🎓 Información del Alumno
-- **Nombre y Apellido**: [Nombre y Apellido del Alumno]
+- **Nombre y Apellido**: Emiliano Coratolo
 
 ## 📋 Requisitos Adicionales
 
@@ -392,3 +392,186 @@ El uso inadecuado de IA puede resultar en:
 ## 📝 Licencia
 
 Este trabajo es parte del curso de Programación Avanzada de Ingeniería en Informática. Uso educativo únicamente.
+
+# Sistema de Gestión de Biblioteca Digital
+
+## Documentación del Sistema
+
+### 1. Descripción general de la arquitectura
+El sistema sigue un diseño modular basado en principios SOLID:
+
+- **Modelo**  
+  - `Usuario`, `RecursoDigital` (subclases: `Libro`, `Audiolibro`, `Historieta`), `Prestamo`, `Reserva`.  
+- **Servicios / Lógica de negocio**  
+  - `GestorUsuarios`, `GestorRecursos`, `GestorPrestamos`, `GestorReservas`.  
+- **Notificaciones y Alertas**  
+  - `ServicioNotificacionesEmail`, `ServicioNotificacionesSMS`, `ServicioNotificacionPrestamos`.  
+  - `AlertaVencimiento`, `AlertaDisponibilidad`, `HistorialAlertas`.  
+- **Interfaz**  
+  - `Consola.java`: menús y flujo de interacción.  
+- **Asincronía**  
+  - `ScheduledExecutorService` para alertas de vencimiento cada 10 segundos.  
+  - `ExecutorService` para generación asíncrona de reportes con progreso.  
+
+### 2. Explicación de los componentes principales
+
+| Componente                 | Responsabilidad                                                |
+| -------------------------- | -------------------------------------------------------------- |
+| `Usuario`                  | Datos del usuario y validaciones.                              |
+| `RecursoDigital`           | Modelo base de recursos; subclases gestionan atributos específicos. |
+| `GestorUsuarios`           | Registro y búsqueda de usuarios.                               |
+| `GestorRecursos`           | Alta, listado y búsqueda (título, categoría) de recursos.      |
+| `GestorPrestamos`          | Lógica de préstamos, devoluciones y notificaciones.            |
+| `GestorReservas`           | Cola de reservas y alerta de disponibilidad automática.        |
+| `AlertaVencimiento`        | Recordatorios automáticos (INFO, WARNING, ERROR).              |
+| `AlertaDisponibilidad`     | Notificaciones cuando un recurso reservado se libera.          |
+| `HistorialAlertas`         | Registro en memoria de todas las alertas generadas.            |
+| `Reportes`                 | Reportes de recursos más prestados, usuarios activos, por categoría. |
+| `Consola`                  | Interfaz de usuario: menús, lectura de entrada y salida.       |
+
+### 3. Flujo de trabajo del sistema
+
+1. **Arranque** (`main`):  
+   - Instancia gestores, servicios y consola.  
+   - Programa alerta de vencimiento cada 10 s.  
+   - Lanza `Consola.iniciar()`.  
+2. **Menú Principal**:  
+   - Registrar usuario, agregar recursos, préstamos, devoluciones, reservas.  
+   - Listados, búsquedas, reportes, alertas y salida.  
+3. **Operación**:  
+   - `Consola` captura datos, invoca el `Gestor*` correspondiente.  
+   - El gestor valida, actualiza estados y dispara notificaciones/alertas.  
+4. **Alertas**:  
+   - `ScheduledExecutorService` ejecuta `AlertaVencimiento` periódicamente en background.  
+   - `AlertaDisponibilidad` se dispara tras cada devolución si hay reservas.  
+5. **Reportes**:  
+   - Opción “Generar Reportes Asíncronos” envía tarea a un `ExecutorService`.  
+   - Muestra progreso (0 %, 33 %, 66 %, 100 %) mientras usa los métodos de `Reportes`.  
+
+---
+
+## Cómo ponerlo en funcionamiento
+
+### Requisitos previos
+- **JDK 21+** instalado y configurado.  
+- **IDE** (IntelliJ, Eclipse) o editor de texto.  
+
+### Compilación con `javac`
+
+git clone git@github.com:um-programacion-ii/programacion-2-trabajo-practico-2-Emicora.git
+cd programacion-2-trabajo-practico-2-Emicora/BibliotecaDigital
+javac -d out $(find src -name "*.java")
+
+## Ejecución
+
+cd out
+java Project.Consola
+
+
+## Prueba de funcionalidades
+
+1.Gestión de Recursos
+
+### Agregar Libro
+
+- Elige opción 2.  
+- Tipo 1 → ingresa ID, título, autor, páginas.  
+- Verifica mensaje “Libro agregado correctamente.”
+
+### Buscar Recurso
+
+- Opción 8 → filtro “a” (título) o “b” (categoría).  
+- Verifica resultados y manejo de “no encontrado.”
+
+### Listar Recursos
+
+- Opción 7 muestra todos los recursos actuales.
+
+2.Gestión de Usuarios
+
+### Registrar Usuario
+
+- Opción 1 → datos de nombre, ID, email, teléfono.  
+- Valida duplicados e inválidos.
+
+### Buscar Usuario
+
+- Opción 9 → ingresa ID → muestra datos o mensaje de error.
+
+3.Préstamos
+
+### Realizar Préstamo
+
+- Opción 3 → ID usuario y recurso.  
+- Verifica disponibilidad y notifica (email/SMS).
+
+### Devolver Recurso
+
+- Opción 4 → ID recurso → cambia a “disponible” y procesa reservas.
+
+4.Reservas
+
+### Realizar Reserva
+
+- Opción 5 → ID usuario y recurso.  
+- Estado pasa a “reservado” y se encola.
+
+### Notificación de Disponibilidad
+
+- Tras devolución de recurso reservado → alerta automática.
+
+5.Reportes
+
+### Generar Reportes Asíncronos
+
+- Opción 12 → muestra progreso y resultados de tres reportes.
+
+6.Alertas
+
+### Alertas de Vencimiento
+
+- Se ejecutan cada 10 s.  
+- Muestran prefijo `[INFO]`, `[WARNING]`, `[ERROR]`.
+
+### Historial de Alertas
+
+- Opción 14 muestra todas las alertas registradas.
+
+
+## Ejemplos de flujo
+
+### Flujo de Préstamo
+
+1 → crear usuario U1
+2 → agregar libro L1
+3 → prestar L1 a U1  → OK
+7 → listar recursos  → L1 prestado
+4 → devolver L1      → OK y procesa reservas
+7 → listar recursos  → L1 disponible
+
+### Sistema de Reservas
+
+1 → crear usuarios U2, U3
+2 → agregar libro L2
+5 → reservar L2 por U2
+5 → reservar L2 por U3
+4 → devolver L2 → alerta a U2
+4 → devolver L2 → alerta a U3
+
+### Alertas y Renovación
+
+Prestar L3 a U1
+Esperar 10 s → alerta [WARNING] o [ERROR]
+14 → ver historial → alerta registrada
+
+## Simuladores de situaciones
+
+En la carpeta simuladores se encuentra una serie de clases que simulan diversas situaciones para observar el flujo del codigo.
+
+Las situaciones simuladas son:
+
+- 1: SimuladorConcurrente muestra que pasa si dos hilos intentan realizar un prestamo al mismo tiempo.
+- 2: SimuladorDisponibilidad muestra como funciona la alerta de disponibilidad.
+- 3: SimuladorPrestamoFallido muestra que aparece cuando se intenta prestar un recurso no disponible.
+- 4: SimuladorReportes muestra la generacion de recursos.
+- 5: SimuladorVencimiento muestra como funciona la alerta de vencimiento y la posibilidad de renovacion.

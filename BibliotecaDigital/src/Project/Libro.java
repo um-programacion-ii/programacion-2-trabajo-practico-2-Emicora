@@ -1,3 +1,5 @@
+package Project;
+
 public class Libro extends RecursoDigital implements Prestable, Renovable {
     private String autor;
     private int paginas;
@@ -10,7 +12,7 @@ public class Libro extends RecursoDigital implements Prestable, Renovable {
 
     @Override
     public void mostrarInformacion() {
-        System.out.println("Libro: " + getTitulo()
+        System.out.println("Project.Libro: " + getTitulo()
                 + " | Autor: " + autor
                 + " | Categoría: " + getCategoria()
                 + " | Estado: " + getEstado());
